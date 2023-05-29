@@ -1,0 +1,183 @@
+<style>
+    h2 {
+        right: 0;
+        margin: 20px;
+        
+    }
+    .header{
+        margin-left: 114px;
+    }
+    .category{
+        padding-bottom: 2px;
+    }
+    .content{
+        margin-top: 12px;
+
+    }
+</style>
+<app-navbar>
+</app-navbar>
+<app-menu></app-menu>
+<div class="header">    
+    <h4><p class="category">الأعــــــوان</p></h4>
+    <button  title="إضافة عون"
+      class="btn btn-info"  (click)="onNewPersonnel()" >+</button>
+
+  </div>
+<div class="content">
+    <div *ngIf="mode=='new-personnel'" class="container">
+        <div class="col-md-12 card">
+            <div class="header">
+                <h4 class="title text-center">إضافة عون</h4>
+            </div>
+            <div class="content">
+                <form action="" method="post">
+                    <div class="row g-3 space">
+                        <div class="col-sm">
+                            <input type="text" class="form-control" 
+                            placeholder="الإسم" aria-label="الإسم" 
+                            [(ngModel)]="pers.nom" name="nom" 
+                            [ngModelOptions]="{standalone:true}">
+                        </div>
+                        <div class="col-sm">
+                            <input type="text" class="form-control" 
+                            placeholder="اللقب" aria-label="اللقب" 
+                            [(ngModel)]="pers.pnom" name="pnom" 
+                            [ngModelOptions]="{standalone:true}">
+                        </div>
+                        <div class="col-sm">
+                            <input type="text" class="form-control" 
+                            placeholder="الرقم الشخصي" aria-label="الرقم الشخصي" 
+                            [(ngModel)]="pers.matricule" name="matricule" 
+                            [ngModelOptions]="{standalone:true}">
+                        </div>
+                    </div>
+                    <div class="row g-4 space">
+                        <div class="col-sm">
+                            <label>
+                                <p> تاريخ الولادة </p>
+                            </label>
+                            <input type="date" class="form-control"
+                            placeholder="تاريخ الولادة" aria-label="تاريخ الولادة"
+                            [(ngModel)]="pers.datenaiss"
+                            [ngModelOptions]="{standalone:true}">
+                        </div>
+                        <div class="col-sm">
+                            <label>
+                                <p> تاريخ الإنتداب </p>
+                            </label>
+                            <input type="date" class="form-control"
+                            placeholder="تاريخ الإنتداب" aria-label="تاريخ الإنتداب"
+                            [(ngModel)]="pers.daterecrute"
+                            [ngModelOptions]="{standalone:true}">
+                        </div>
+                    </div>
+                    <div class="row g-4 space">
+                       
+                        <div class="col-sm">
+                            <input type="number" class="form-control"
+                            placeholder="رقم بطاقة التعريف الوطنيّة" aria-label="رقم بطاقة التعريف الوطنيّة"
+                            [(ngModel)]="pers.cin"
+                            [ngModelOptions]="{standalone:true}">
+                        </div>
+                        <div class="col-sm">
+                            <input type="number" class="form-control"
+                            placeholder="المعرّف الوحيد" aria-label="المعرّف الوحيد"
+                            [(ngModel)]="pers.cnrps"
+                            [ngModelOptions]="{standalone:true}">
+                        </div>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-sm">
+                            <input type="text" class="form-control"
+                            placeholder="قرار التعيين" aria-label="قرار التعيين"
+                            [(ngModel)]="pers.decisionRecrutement"
+                            [ngModelOptions]="{standalone:true}">
+                        </div>
+                        <div class="col-sm">
+                            <input type="number" class="form-control"
+                            placeholder="رقم الحساب البنكي" aria-label="رقم الحساب البنكي"
+                            [(ngModel)]="pers.rib"
+                            [ngModelOptions]="{standalone:true}">
+                        </div>
+                        <div class="col-sm">
+                            <mat-select class="form-control" 
+                                placeholder="وضعية العون" aria-label="وضعية العون"
+                                [(ngModel)]="pers.etat" name="etat" 
+                                [ngModelOptions]="{standalone: true}">
+                                <mat-option value="مباشر">مباشر</mat-option>
+                                <mat-option value="متقاعد">متقاعد</mat-option>
+                                <mat-option value="متوفي">متوفي</mat-option>
+                                <mat-option value="مستقيل">مستقيل</mat-option>
+                                <mat-option value="معزول">معزول</mat-option>
+                            </mat-select>
+                        </div>
+                        
+                    </div>
+                    <br>
+                    <div class="row btn-space">
+                        <div class="col-lg-12 ">
+                            <button type="reset" (click)="onCancel"
+                            class="btn btn-secondary btn-fill ">إلغـــــــاء</button>
+                            <button type="submit" class="btn btn-info btn-fill float-right btn-space" (click)="onSubmit()">إضــــافة</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h2 class="text-center">قائمة الأعــــــوان</h2>
+    <input
+    type="text"
+    class="form-control"
+    placeholder="Search..."
+    [(ngModel)]="filterTerm"
+  />
+    <hr>
+    <div class="text-center">
+        <div class="shadow-lg p-3 mb-5 bg-body rounded">
+           
+        <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">الرقم الشخصي</th>
+                        <th scope="col">الاسم</th>
+                        <th scope="col">اللقب</th>
+                        <th scope="col">تاريخ الانتداب</th>
+                        <th scope="col">رقم بطاقة التعريف الوطنية</th>
+                        <th scope="col">المعرف الوحيد</th>
+                        <th scope="col">الوضعية</th>
+                        <th scope="col">PDF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor = "let Personnel of personnels">
+                        <td class="text-center">{{Personnel.matricule}}</td>
+                        <td class="text-center">{{Personnel.nom}}</td>
+                        <td class="text-center">{{Personnel.pnom}}</td>
+                        <td class="text-center">{{Personnel.daterecrute}}</td>
+                        <td class="text-center">{{Personnel.cin}}</td>
+                        <td class="text-center">{{Personnel.cnrps}}</td>
+                        <td class="text-center">{{Personnel.etat}}</td>
+                        <td class="text-center">
+                            <button type="button" title="معاينة" (click)="personnelDetails(Personnel.matricule)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button type="button" title="تعديل" (click)="updateEmployeeRecord(pers.matricule)">
+                                <i class="bi bi-clipboard2-pulse"></i>
+                            </button>
+                            <button type="button" title="مسح " (click)="Personnel.idPersonnel !== undefined && OnDeletePersonnel(+Personnel.idPersonnel)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+        </table>
+        </div>
+    </div>
+</div>
