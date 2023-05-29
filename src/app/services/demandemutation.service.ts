@@ -1,41 +1,37 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Demandemutation } from '../classes/demandemutation';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DemandemutationService {
-  private baseURL="http://127.0.0.1:8083/apiDemandeMutation";
-  iddemandemutation:any;
-  constructor(private httpClient: HttpClient) { }
+  private apiUrl = 'http://localhost:8080/demande-mutations';
 
-  getDemandeMutationList():Observable<Demandemutation[]>{
-    return this.httpClient.get<Demandemutation[]>(`${this.baseURL}`);
+  constructor(private http: HttpClient) { }
+
+  createDemandeMutation(demandeMutation: Demandemutation): Observable<any> {
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+
+    return this.http.post(this.apiUrl, demandeMutation, { headers })
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
-  getDemandeMutationById(id:any):Observable<Object>{
-    return this.httpClient.get(`${this.baseURL}/${id}`);
-  }
-
-  createDemandeMutation(demandemutation:Demandemutation):Observable<Demandemutation>{
-    return this.httpClient.post<Demandemutation>(`${this.baseURL}`,demandemutation);
-  }
-
-  updateDemandeMutation(demandemutation:Demandemutation){
-    return this.httpClient.put<Demandemutation>(`${this.baseURL}/${this.iddemandemutation}`,demandemutation);
-  }
-
-  getId(getId?:number){
-    this.iddemandemutation=getId;
-  }
-
-  public deleteDemandeMutation(iddemandemutation?:number):Observable<Demandemutation>{
-    return this.httpClient.delete<Object>(`${this.baseURL}/${this.iddemandemutation}`);
-  }
-
-  get(id:number):Observable<Demandemutation>{
-    return this.httpClient.get(`${this.baseURL}/${id}`);
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An error occurred';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(errorMessage);
   }
 }
