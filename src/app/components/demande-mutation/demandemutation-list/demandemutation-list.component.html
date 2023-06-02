@@ -1,35 +1,64 @@
-<div>
-    <h2>Create Demande Mutation</h2>
-    <form (ngSubmit)="createDemandeMutation()" enctype="multipart/form-data">
-      <div>
-        <label>Cause</label>
-        <input type="text" [(ngModel)]="demandeMutation.cause" name="cause" required>
-      </div>
-      <div>
-        <label>Decision</label>
-        <input type="text" [(ngModel)]="demandeMutation.decision" name="decision" required>
-      </div>
-      <div>
-        <label>Personnel</label>
-        <input type="text" [(ngModel)]="demandeMutation.personnel" name="personnel" required>
-      </div>
-      <div>
-        <label>Date Insert</label>
-        <input type="text" [(ngModel)]="demandeMutation.dateinsert" name="dateinsert" required>
-      </div>
-      <div>
-        <label>Date Demande</label>
-        <input type="text" [(ngModel)]="demandeMutation.datedemande" name="datedemande" required>
-      </div>
-      <div>
-        <label>File</label>
-        <input type="file" (change)="onFileSelected($event)" name="file" required>
-      </div>
-      <div>
-        <button type="submit">Create</button>
-      </div>
-    </form>
-    <p *ngIf="message">{{ message }}</p>
-    <progress *ngIf="progress > 0" [value]="progress" max="100"></progress>
+<div class="row">
+  <div class="col-8">
+    <label class="btn btn-default p-0">
+      <input type="file" (change)="selectFile($event)" />
+    </label>
+  </div>
+ 
+  <div>
+    <label for="cause">Cause:</label>
+    <input type="text" id="cause" [(ngModel)]="cause" name="cause">
   </div>
   
+  <div>
+    <label for="decision">Decision:</label>
+    <input type="text" id="decision" [(ngModel)]="decision" name="decision">
+  </div>
+
+  <div>
+    <label for="datedemande">datedemande:</label>
+    <input type="date" id="datedemande" [(ngModel)]="datedemande" name="datedemande">
+  </div>
+
+  <!--
+  
+  <select [(ngModel)]="selectedPersonnel" name="personnel" id="personnel">
+    <option *ngFor="let personnel of personnelList" [ngValue]="personnel">{{ personnel.nom }}</option>
+  </select> -->
+
+  <div class="col-4">
+    <button
+      class="btn btn-success btn-sm"
+      [disabled]="!selectedFiles"
+      (click)="upload()"
+    >
+      Upload
+    </button>
+  </div>
+</div>
+
+<div *ngIf="currentFile" class="progress my-3">
+  <div
+    class="progress-bar progress-bar-info"
+    role="progressbar"
+    attr.aria-valuenow="{{ progress }}"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    [ngStyle]="{ width: progress + '%' }"
+  >
+    {{ progress }}%
+  </div>
+</div>
+
+<div *ngIf="message" class="alert alert-secondary" role="alert">
+  {{ message }}
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">List of Files</div>
+  <ul class="list-group list-group-flush">
+    <li *ngFor="let file of fileInfos | async" class="list-group-item">
+      <a href="{{ file.url }}">{{ file.name }}</a>
+    </li>
+  </ul>
+</div>

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Demandemutation } from '../classes/demandemutation';
+import { Personnel } from '../classes/personnel';
 
 @Injectable({
   providedIn: 'root'
@@ -12,26 +13,27 @@ export class DemandemutationService {
 
   constructor(private http: HttpClient) { }
 
-  createDemandeMutation(demandeMutation: Demandemutation): Observable<any> {
-    const headers = new HttpHeaders();
-    headers.append('Content-Type', 'multipart/form-data');
-
-    return this.http.post(this.apiUrl, demandeMutation, { headers })
-      .pipe(
-        catchError(this.handleError)
-      );
+  upload(file: File,cause:string,decision:string,datedemande:string): Observable<HttpEvent<any>> {
+    const formData: FormData = new FormData();
+  
+    formData.append('file', file);
+    formData.append('cause',cause);
+    formData.append('decision',decision);
+    formData.append('datedemande',datedemande);
+    //formData.append('personnel', personnel.toString());
+  
+    const req = new HttpRequest('POST', `${this.apiUrl}`, formData, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+  
+    return this.http.request(req);
   }
 
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'An error occurred';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    console.error(errorMessage);
-    return throwError(errorMessage);
+  
+  
+
+  getFiles(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/files`);
   }
 }
