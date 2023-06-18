@@ -13,19 +13,24 @@ export class DemandemutationService {
 
   constructor(private http: HttpClient) { }
 
-  upload(file: File,cause:string,decision:string,datedemande:string): Observable<HttpEvent<any>> {
+  upload(file: File,cause:string,decision:string,datedemande:string,personnel:number): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
-  
+    console.log("formdata", file);
+    console.log("decision", decision);
+    console.log("cause", cause);
+    console.log("date", datedemande);
+    console.log("persoooooo", personnel);
     formData.append('file', file);
     formData.append('cause',cause);
     formData.append('decision',decision);
     formData.append('datedemande',datedemande);
-    //formData.append('personnel', personnel.toString());
+    formData.append('personnel', personnel.toString());
   
     const req = new HttpRequest('POST', `${this.apiUrl}`, formData, {
       reportProgress: true,
       responseType: 'json'
     });
+
   
     return this.http.request(req);
   }

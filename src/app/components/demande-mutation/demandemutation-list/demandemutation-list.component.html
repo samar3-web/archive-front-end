@@ -1,39 +1,82 @@
-<div class="row">
-  <div class="col-8">
-    <label class="btn btn-default p-0">
-      <input type="file" (change)="selectFile($event)" />
-    </label>
-  </div>
- 
-  <div>
-    <label for="cause">Cause:</label>
-    <input type="text" id="cause" [(ngModel)]="cause" name="cause">
-  </div>
-  
-  <div>
-    <label for="decision">Decision:</label>
-    <input type="text" id="decision" [(ngModel)]="decision" name="decision">
-  </div>
+<app-navbar>
+</app-navbar>
+<app-menu></app-menu>
 
-  <div>
-    <label for="datedemande">datedemande:</label>
-    <input type="date" id="datedemande" [(ngModel)]="datedemande" name="datedemande">
-  </div>
-
-  <!--
-  
-  <select [(ngModel)]="selectedPersonnel" name="personnel" id="personnel">
-    <option *ngFor="let personnel of personnelList" [ngValue]="personnel">{{ personnel.nom }}</option>
-  </select> -->
-
-  <div class="col-4">
-    <button
-      class="btn btn-success btn-sm"
-      [disabled]="!selectedFiles"
-      (click)="upload()"
-    >
-      Upload
-    </button>
+<div class="header">    
+  <h4><p class="category">مطالب النـــــــــقل</p></h4>
+  <button  title="إضافة عون"
+    class="btn btn-info"  (click)="onNewPersonnel()" >+</button>
+</div>
+<div class="content">
+  <div *ngIf="mode=='new-personnel'" class="container">
+    <div class="col-md-12 card">
+      <div class="header">
+        <h4 class="title text-center">إضــــافة مطلب نقـــــــــلة</h4>
+      </div>
+        <div class="content">
+          <form action="" method="post">
+            <div class="row g-3 space">
+              <!--
+              <div class="col-sm">
+                <mat-select class="form-control"
+                placeholder="نوع النقلة" aria-label="نوع النقلة"
+                [(ngModel)]="name" name="name"
+                [ngModelOptions]="{standalone:true}">
+                  <mat-option value="نقلة صيفيــــة">نقلة صيفيــــة</mat-option>
+                  <mat-option value="نقلة تعديليــة">نقلة تعديليــة</mat-option>
+                  <mat-option value="نقلة تأديبيــة">نقلة تأديبيــة</mat-option>
+                  <mat-option value="نقلة إستثنائية">نقلة إستثنائية</mat-option>
+                  <mat-option value="نقلة عاديــــة">نقلة عاديــــة</mat-option>
+                </mat-select>
+              </div>
+              -->
+              <div>
+                <input type="date" class="form-control"
+                placeholder="تاريخ تقديم الطلب" aria-label="تاريخ تقديم الطلب"
+                [(ngModel)]="datedemande" name="datedemande"
+                [ngModelOptions]="{standalone:true}">
+              </div>
+              <div>
+                <input type="text" class="form-control"
+                placeholder="سبب النقلة" aria-label="سبب النقلة"
+                [(ngModel)]="cause" name="cause"
+                [ngModelOptions]="{standalone:true}">
+              </div>
+            </div>
+            <div class="row g-3 space">
+              <div class="col-sm">
+                <mat-select class="form-control"
+                placeholder="القـــــــــرار" aria-label="القـــــــــرار"
+                [(ngModel)]="decision" name="decision"
+                [ngModelOptions]="{standalone:true}">
+                  <mat-option value="الموافقـــــــة">الموافقــــــة</mat-option>
+                  <mat-option value="عدم الموافقـــــــة">عدم الموافقـة</mat-option>
+                </mat-select>
+              </div>
+              <mat-select class="form-control" placeholder="العــون" aria-label="العــون"
+              [(ngModel)]="selectedPersonnel" name="selectedPersonnel" [ngModelOptions]="{ standalone:true }">
+              <mat-option *ngFor="let personnel of personnelList" [value]="personnel">
+                {{ personnel.nom }} {{ personnel.pnom }}:{{ personnel.matricule }}
+              </mat-option>
+            </mat-select>
+            
+              <div class="col-sm">
+                <input type="file" (change)="selectFile($event)" />
+              </div>
+            </div>
+            <br>
+                    <div class="row btn-space">
+                        <div class="col-lg-12 ">
+                            <button type="reset" (click)="onCancel"
+                            class="btn btn-secondary btn-fill ">إلغـــــــاء</button>
+                            <button type="submit" class="btn btn-info btn-fill float-right btn-space" (click)="upload()">إضــــافة</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <br>
+          </form>
+        </div>
+    </div>
   </div>
 </div>
 

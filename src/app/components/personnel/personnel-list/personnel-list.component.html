@@ -168,10 +168,10 @@
                             <button type="button" title="معاينة" (click)="personnelDetails(Personnel.matricule)">
                                 <i class="bi bi-eye"></i>
                             </button>
-                            <button type="button" title="تعديل" (click)="updateEmployeeRecord(pers.matricule)">
+                            <button type="button" title="تعديل" (click)="updateEmployeeRecord(Personnel.matricule)">
                                 <i class="bi bi-clipboard2-pulse"></i>
                             </button>
-                            <button type="button" title="مسح " (click)="Personnel.idPersonnel !== undefined && OnDeletePersonnel(+Personnel.idPersonnel)">
+                            <button type="button" title="مسح " (click)="Personnel.matricule !== undefined && OnDeletePersonnel(+Personnel.matricule)">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </td>

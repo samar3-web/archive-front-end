@@ -1,7 +1,7 @@
 export class Personnel {
-    idPersonnel?:String;
-    matricule?:any;
-    nom?:String;
+    idPersonnel?:Number;
+    matricule?:Number;
+    nom?:string;
     pnom?:String;
     datenaiss?:String;
     daterecrute?:String;

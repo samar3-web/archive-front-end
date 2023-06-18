@@ -16,7 +16,7 @@ export class DemandemutationListComponent {
  
   selectedPersonnel!: Personnel ;
   personnelList: Personnel[] = [];
-
+  mode = 'list';
   selectedFiles?: FileList;
   currentFile?: File;
   progress = 0;
@@ -27,14 +27,7 @@ export class DemandemutationListComponent {
 
   fileInfos?: Observable<any>;
 
-  demande :Demandemutation = {
-    cause:'',
-    decision:'',
-    personnel:{
-      
-    },
-    file:''
-  }
+  name!: string;
   
   
 
@@ -42,10 +35,20 @@ export class DemandemutationListComponent {
 
   ngOnInit(): void {
     this.getPersonnelList();
+    console.log("hhhhhhhhhhhhhh",this.personnelList);
+    
   }
 
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
+  }
+
+  onNewPersonnel(){
+    if (this.mode != 'new-personnel') {
+      this.mode = 'new-personnel';
+    } else {
+      this.mode = 'list';
+    }
   }
 
   upload(): void {
@@ -53,16 +56,19 @@ export class DemandemutationListComponent {
   
     if (this.selectedFiles) {
       const file: File | null = this.selectedFiles.item(0);
-      const cause: string  = this.cause ;
-      const decision: string  = this.decision ;
+      const cause: string = this.cause;
+      const decision: string = this.decision;
       const datedemande: string = this.datedemande;
-      //const selectedPersonnel : Personnel = this.selectedPersonnel;
-
-      if (file) {
-        this.currentFile = file;
+      
+      const selectedPersonnel: Personnel = this.selectedPersonnel;
   
-        this.demandeMutationService.upload(this.currentFile,cause,decision,datedemande).subscribe({
-          next: (event: any) => {
+      if (file && selectedPersonnel) {
+        this.currentFile = file;
+        const id: number | undefined = selectedPersonnel?.idPersonnel as number;
+        
+  
+        this.demandeMutationService.upload(file, cause, decision, datedemande, id).subscribe(
+          (event: any) => {
             if (event.type === HttpEventType.UploadProgress) {
               this.progress = Math.round((100 * event.loaded) / event.total);
             } else if (event instanceof HttpResponse) {
@@ -70,30 +76,34 @@ export class DemandemutationListComponent {
               this.fileInfos = this.demandeMutationService.getFiles();
             }
           },
-          error: (err: any) => {
-            console.log(err);
+          (error: any) => {
+            console.log(error);
             this.progress = 0;
   
-            if (err.error && err.error.message) {
-              this.message = err.error.message;
+            if (error.error && error.error.message) {
+              this.message = error.error.message;
             } else {
               this.message = 'Could not upload the file!';
             }
   
             this.currentFile = undefined;
-          },
-        });
+          }
+        );
       }
   
       this.selectedFiles = undefined;
     }
   }
+  
+  
+  
 
 
   getPersonnelList(): void {
     this.personnelService.getPersonnelList().subscribe(
       (personnelList) => {
         this.personnelList = personnelList;
+        console.log('gggggggggggggggg',personnelList)
       },
       (error) => {
         console.log(error);
@@ -101,6 +111,13 @@ export class DemandemutationListComponent {
       }
     );
   }
+
+  onCancel()
+  {
+    this.mode='list';
+  }
+
+  
 
   
 

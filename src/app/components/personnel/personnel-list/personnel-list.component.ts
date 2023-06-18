@@ -98,7 +98,7 @@ export class PersonnelListComponent implements OnInit{
     this.mode='list';
   }
 
-  updateEmployeeRecord(matricule? : number){
+  updateEmployeeRecord(matricule? : any){
     console.log("id = ", matricule);
     this.personnelService.getId(matricule);
     this.router.navigate(['personnel']);
