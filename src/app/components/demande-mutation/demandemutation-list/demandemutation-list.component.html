@@ -16,11 +16,11 @@
         <div class="content">
           <form action="" method="post">
             <div class="row g-3 space">
-              <!--
+              
               <div class="col-sm">
                 <mat-select class="form-control"
-                placeholder="نوع النقلة" aria-label="نوع النقلة"
-                [(ngModel)]="name" name="name"
+                placeholder="إسم النقلة" aria-label="إسم النقلة"
+                [(ngModel)]="Dname" name="Dname"
                 [ngModelOptions]="{standalone:true}">
                   <mat-option value="نقلة صيفيــــة">نقلة صيفيــــة</mat-option>
                   <mat-option value="نقلة تعديليــة">نقلة تعديليــة</mat-option>
@@ -29,7 +29,19 @@
                   <mat-option value="نقلة عاديــــة">نقلة عاديــــة</mat-option>
                 </mat-select>
               </div>
-              -->
+
+
+              <div class="col-sm">
+                <mat-select class="form-control"
+                placeholder="نوع النقلة" aria-label="نوع النقلة"
+                [(ngModel)]="Dtype" name="Dtype"
+                [ngModelOptions]="{standalone:true}">
+                  <mat-option value="بطلب ">بطلب</mat-option>
+                  <mat-option value="بإقتراح ">بإقتراح</mat-option>
+
+                </mat-select>
+              </div>
+              
               <div>
                 <input type="date" class="form-control"
                 placeholder="تاريخ تقديم الطلب" aria-label="تاريخ تقديم الطلب"
@@ -97,11 +109,56 @@
   {{ message }}
 </div>
 
-<div class="card mt-3">
-  <div class="card-header">List of Files</div>
-  <ul class="list-group list-group-flush">
-    <li *ngFor="let file of fileInfos | async" class="list-group-item">
-      <a href="{{ file.url }}">{{ file.name }}</a>
-    </li>
-  </ul>
+<div class="container">
+  <h2 class="text-center">    قائمة مطالب النـــــــــقل  </h2>
+  <input
+  type="text"
+  class="form-control"
+  placeholder="Search..."
+  [(ngModel)]="filterTerm"
+/>
+  <hr>
+  <div class="text-center">
+      <div class="shadow-lg p-3 mb-5 bg-body rounded">
+         
+      <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th scope="col">إسم النقلة</th>
+                      <th scope="col">نوع النقلة</th>
+                      <th scope="col">تاريخ تقديم الطلب</th>
+                      <th scope="col">سبب النقلة</th>
+                      <th scope="col">القـــــــــرار</th>
+                      <th scope="col">العــون</th>
+                      <th scope="col">PDF</th>
+                      <th scope="col">..</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let file of fileInfos | async">
+                      <td class="text-center">{{file.dname}}</td>
+                      <td class="text-center">{{file.dtype}}</td>
+                      <td class="text-center">{{file.dateinsert}}</td>
+                      <td class="text-center">{{file.cause}}</td>
+                      <td class="text-center">{{file.decision}}</td>
+                      <td class="text-center">{{file.personnel.pnom}}  {{file.personnel.nom}} </td>
+                      <td class="text-center"><a href="{{ file.url }}">{{ file.name }}</a></td>
+                      <td class="text-center">
+                          <button type="button" title="معاينة">
+                              <i class="bi bi-eye"></i>
+                          </button>
+                          <button type="button" title="تعديل" >
+                              <i class="bi bi-clipboard2-pulse"></i>
+                          </button>
+                          <button type="button" title="مسح ">
+                              <i class="bi bi-trash"></i>
+                          </button>
+                      </td>
+                  </tr>
+              </tbody>
+      </table>
+      </div>
+  </div>
 </div>
+  
+

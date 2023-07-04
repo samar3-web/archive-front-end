@@ -1,5 +1,4 @@
 export class Personnel {
-    idPersonnel?:Number;
     matricule?:Number;
     nom?:string;
     pnom?:String;
@@ -10,5 +9,5 @@ export class Personnel {
     cnrps?:String;
     rib?:String;
     etat?:String;
-    pdfPers?:File[];
+   
 }

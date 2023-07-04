@@ -1,4 +1,4 @@
-import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -24,11 +24,13 @@ export class DemandemutationListComponent {
   cause! : string ;
   decision! : string ;
   datedemande! : string;
+  Dname!: string;
+  Dtype!: string;
+  filterTerm!: string;
 
   fileInfos?: Observable<any>;
 
   name!: string;
-  
   
 
   constructor(private demandeMutationService: DemandemutationService,private personnelService:PersonnelService,private router:Router) { }
@@ -36,6 +38,8 @@ export class DemandemutationListComponent {
   ngOnInit(): void {
     this.getPersonnelList();
     console.log("hhhhhhhhhhhhhh",this.personnelList);
+    this.fileInfos = this.demandeMutationService.getFiles();
+
     
   }
 
@@ -51,6 +55,8 @@ export class DemandemutationListComponent {
     }
   }
 
+
+
   upload(): void {
     this.progress = 0;
   
@@ -59,15 +65,17 @@ export class DemandemutationListComponent {
       const cause: string = this.cause;
       const decision: string = this.decision;
       const datedemande: string = this.datedemande;
+      const Dname : string = this.Dname;
+      const Dtype : string = this.Dtype;
       
       const selectedPersonnel: Personnel = this.selectedPersonnel;
   
       if (file && selectedPersonnel) {
         this.currentFile = file;
-        const id: number | undefined = selectedPersonnel?.idPersonnel as number;
+        const id: number | undefined = selectedPersonnel?.matricule as number;
         
   
-        this.demandeMutationService.upload(file, cause, decision, datedemande, id).subscribe(
+        this.demandeMutationService.upload(file, cause, decision, datedemande, id, Dname, Dtype).subscribe(
           (event: any) => {
             if (event.type === HttpEventType.UploadProgress) {
               this.progress = Math.round((100 * event.loaded) / event.total);
